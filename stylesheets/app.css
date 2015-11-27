@@ -13,7 +13,6 @@
 }
 
 h2{
-  margin-top: 50px;
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
 }
 
@@ -28,4 +27,16 @@ h2{
 
 .choice {
   display: block;
+}
+
+#footer {
+  margin-top: 25px;
+}
+
+hr.gradient {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
