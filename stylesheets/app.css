@@ -7,7 +7,7 @@
 }
 
 .title {
-  color: #333;
+  color: #444;
   font-weight: bold;
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
 }
@@ -20,6 +20,10 @@ h2{
 .text {
   font-family: "Comic Sans MS", cursive, sans-serif;
   color: #555;
+}
+
+.choices-title {
+  color: #444;
 }
 
 .choice {
