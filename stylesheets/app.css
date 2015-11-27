@@ -1,14 +1,14 @@
 .chapter {
   padding: 25px;
   border-style: solid;
-  border-color: #ddd;
+  border-color: #ccc;
   border-width: 1px;
   background-image: url('../assets/images/parchemin3.jpg');
+  box-shadow: 10px 10px 5px #eee;
 }
 
 .title {
   color: #444;
-  font-weight: bold;
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
 }
 
@@ -30,7 +30,18 @@ h2{
 }
 
 #footer {
+  font-size: 11px;
   margin-top: 25px;
+}
+
+.choices li{ 
+  margin: 0; 
+  list-style: none; 
+}
+.choices li:before { 
+  float: left;
+  content: '◆'; 
+  margin-right: 5px;
 }
 
 hr.gradient {
