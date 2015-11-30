@@ -1,12 +1,12 @@
 $(function() {
   console.log("firing document ready event!");
 
-  var current_chapter;
+  var current_story;
 
   var show_next_chapter = function(chapter_nb){
-    $.getJSON('/chapters/' + chapter_nb + '.js', function(result){
+    $.getJSON('/stories/' + current_story + '/' + chapter_nb + '.js', function(result){
       console.log(result);
-      current_chapter = result;
+      var current_chapter = result;
       $('.chapter > .title').html(current_chapter.title);
       $('.chapter > .text').html(current_chapter.text);
 
@@ -24,10 +24,16 @@ $(function() {
     });
   };
 
-  show_next_chapter(1);
 
   $(document).on('click', 'a.choice', function(el){
     next_chapter_nb = $(el.target).data('next-chapter-nb');
     show_next_chapter(next_chapter_nb);
+  });
+
+  $(document).on('click', '.home a', function(el){
+    current_story = $(el.target).text().toLowerCase().replace(' ', '-');
+    $('.main').load('story.html', function(){
+      show_next_chapter(1);
+    });
   });
 });
