@@ -1,0 +1,21 @@
+{
+  "name": "game-book-js",
+  "version": "0.0.1",
+  "description": "Game Book in JavaScript",
+  "main": "server.js",
+  "dependencies": {
+    "connect": "^3.4.0",
+    "serve-static": "^1.10.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "JavaScript",
+    "GameBook"
+  ],
+  "author": "Martin Carel",
+  "license": "MIT"
+}
