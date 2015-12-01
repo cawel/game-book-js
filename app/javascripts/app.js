@@ -5,7 +5,6 @@ $(function() {
 
   var show_next_chapter = function(chapter_nb){
     $.getJSON('/stories/' + current_story + '/' + chapter_nb + '.js', function(result){
-      console.log(result);
       var current_chapter = result;
       $('.chapter > .title').html(current_chapter.title);
       $('.chapter > .text').html(current_chapter.text);
