@@ -19,7 +19,7 @@ $(function() {
 
       // edge case for the last chapter
       if(current_chapter.choices.length == 0){
-        $('.choices-title').remove();
+        $('.choices-title').text('The End.');
       }
     });
   };
