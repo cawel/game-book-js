@@ -17,7 +17,7 @@ $(function() {
 function Story(story_title, dom_container){
 
   var chapters = [];
-  var story_endpoint_url_base = '/stories/' + story_title + '/';
+  var storiesDB = new Firebase('https://game-book-stories.firebaseio.com/stories/' + story_title + '/chapters');
 
   var start = function(){
     $(dom_container).load('story.html', function(){
@@ -25,20 +25,17 @@ function Story(story_title, dom_container){
     });
   }
 
-  var story_endpoint_url = function(chapter_nb){
-    return story_endpoint_url_base + chapter_nb + '.js';
-  }
-
   var display_next_chapter = function(chapter){
     $('.chapter > .title').html(chapter.title);
     $('.chapter > .text').html(chapter.text);
 
     $('.chapter > .choices').empty();
+    if ( chapter.choices == undefined ) chapter.choices = [];
     chapter.choices.forEach(function(choice){
       $('.chapter > .choices').append("<ul>");
       $('.chapter > .choices').append("<li><a data-next-chapter-nb='" + choice[1] + "' class='choice' href='#'>" + choice[0] + "</a></li>");
       $('.chapter > .choices').append("</ul>");
-      preload_chapters(choice[1]);
+      // preload_chapters(choice[1]);
     });
 
     // edge case for the last chapter
@@ -51,8 +48,13 @@ function Story(story_title, dom_container){
     if (chapters[chapter_nb] ) {
       display_next_chapter(chapters[chapter_nb])
     } else { 
-      $.getJSON(story_endpoint_url(chapter_nb), function(chapter){
-        display_next_chapter(chapter);
+      storiesDB.child(String(chapter_nb)).on("value", function(snapshot){
+        var chapter = snapshot.val();
+        if( chapter == null ){
+          console.log("Could not find the chapter '" + chapter_nb + "' for story '" + story_title + "'");
+        }else{
+          display_next_chapter(snapshot.val());
+        }
       });
     }
   };
