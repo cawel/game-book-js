@@ -1,0 +1,24 @@
+<div class='chapter'>
+  <h1 class='title'>
+    {{ chapter.title }}
+  </h1>
+
+  <p ng-bind-html="renderHtml(chapter.text)" class='text'></p>
+
+  <hr class='gradient'>
+
+  <div ng-show="chapter.choices.length > 0">
+    <h2 class='choices-title'>Your Choices:</h2>
+    <p class='choices'>
+    <ul ng-repeat="choice in chapter.choices">
+      <li>
+        <a href='#' ng-click="selectChapter(choice[1])">{{ choice[0] }}</a>
+      </li>
+    </ul>
+    </p>
+  </div>
+
+  <div ng-show="chapter.choices == undefined">
+    <h2 class='choices-title'>The End</h2>
+  </div>
+</div>
