@@ -5,16 +5,16 @@
 
   <p ng-bind-html="renderHtml(chapter.text)" class='text'></p>
 
-  <hr class='gradient'>
+  <hr class='gradient'></hr>
 
   <div ng-show="chapter.choices.length > 0">
     <h2 class='choices-title'>Your Choices:</h2>
     <p class='choices'>
-    <ul ng-repeat="choice in chapter.choices">
-      <li>
-        <a href='#' ng-click="selectChapter(choice[1])">{{ choice[0] }}</a>
-      </li>
-    </ul>
+      <ul ng-repeat="choice in chapter.choices">
+        <li>
+          <a class='choice' href='#' ng-click="selectChapter(choice[1])">{{ choice[0] }}</a>
+        </li>
+      </ul>
     </p>
   </div>
 
