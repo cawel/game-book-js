@@ -48,7 +48,7 @@
     </script>
   </head>
 
-  <body ng-app='gameBook'>
+  <body>
 
     <div class='container'>
       <nav class="navbar navbar-default">
@@ -65,13 +65,15 @@
         </div>
       </nav>
 
-      <div class='main'>
-        <div class='home'>
-          <h1>Choose your own adventure!</h1>
-          <ul>
-            <li><a href='#'>The Encounter</a></li>
-            <li><a href='#'>Open Space</a></li>
-          </ul>
+      <div ng-app='gameBook'>
+        <div class='main'>
+          <div class='home'>
+            <h1>Choose your own adventure!</h1>
+            <ul>
+              <li><a href='#'>The Encounter</a></li>
+              <li><a href='#'>Open Space</a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -85,16 +87,23 @@
 
     <script type="text/javascript">
       if( getCookie('implementation') == 'Angular' ){
+
         $(function(){
-          var el = document.createElement('div');
-          el.setAttribute('ng-include', "'index-angular.html'");
-          el.setAttribute('id', 'dynamic-chapter-container');
-          $('.main').replaceWith(el);
-          angular.element('#dynamic-chapter-container').injector().invoke(['$compile', function ($compile) {
-            var $scope = angular.element(el).scope();
-            $compile(el)($scope);
-            $scope.$apply();
-          }]);
+          // load a new story upon user selection
+          $('.main').on('click', '.home a', function(el){
+            var story_title = $(el.target).text().toLowerCase().replace(' ', '-');
+
+            var el = document.createElement('div');
+            el.setAttribute('ng-include', "'angular-chapter-container.html'");
+            el.setAttribute('id', 'dynamic-chapter-container');
+            <!-- el.setAttribute('data-story-title', story_title); -->
+            $('.main').replaceWith(el);
+            angular.element('#dynamic-chapter-container').injector().invoke(['$compile', function ($compile) {
+              var $scope = angular.element(el).scope();
+              $compile(el)($scope);
+              $scope.$apply();
+            }]);
+          });
         });
       }else{
         addScript('javascripts/plain/app.js');
