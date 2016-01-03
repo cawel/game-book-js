@@ -7,7 +7,7 @@ angular.module('gameBook.directives.chapter', [])
       selectChapter : '='
     },
     replace: true,
-    templateUrl: 'chapter.html',
+    templateUrl: 'angular-chapter.html',
     link: function (scope, element) {
       scope.chapter = scope.$parent.chapter;
       scope.renderHtml = function(html_code) {
