@@ -9,7 +9,7 @@ The idea is to experiment with JavaScript technologies while implemeting a game 
 
 The data resides on a nosql db on Firebase.io
 
-A live demo exists here:
+A live demo exists [here](http://game-book-js.herokuapp.com/).
 
 
 ## Development
