@@ -20,7 +20,7 @@ function Story(story_title, dom_container){
   var storiesDB = new Firebase('https://game-book-stories.firebaseio.com/stories/' + story_title + '/chapters');
 
   var start = function(){
-    $(dom_container).load('story.html', function(){
+    $(dom_container).load('templates/plain/story.html', function(){
       load_next_chapter(1);
     });
   }

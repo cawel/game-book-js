@@ -27,7 +27,6 @@
     <script src='/javascripts/angular/app.js'></script>
     <script src='/javascripts/angular/directives/chapter.js'></script>
           
-
     <script type="text/javascript">
       function addScript( src ) {
         var s = document.createElement('script');
@@ -60,8 +59,7 @@
             <ul class="nav navbar-nav">
               <li><a href="/">Stories</a></li>
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Implementation
-                  <span class="caret"></span></a>
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Implementation<span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li class='menu-item-plain-js'><a class='plain-js' href="#">Plain JS</a></li>
                   <li class='menu-item-angular-js'><a class='angular-js' href="#">Angular JS</a></li>
@@ -120,14 +118,15 @@
         if( getCookie('implementation') == 'AngularJS' ){
           activateAngularJS();
 
+          // todo: load Angular scripts dynamically
+
           // load a new story upon user selection
           $('.main').on('click', '.home a', function(el){
             var story_title = $(el.target).text().toLowerCase().replace(' ', '-');
 
             var el = document.createElement('div');
-            el.setAttribute('ng-include', "'angular-chapter-container.html'");
+            el.setAttribute('ng-include', "'templates/angular/chapter-container.html'");
             el.setAttribute('id', 'dynamic-chapter-container');
-            <!-- el.setAttribute('data-story-title', story_title); -->
             $('.main').replaceWith(el);
             angular.element('#dynamic-chapter-container').injector().invoke(['$compile', function ($compile) {
               var $scope = angular.element(el).scope();
