@@ -19,19 +19,14 @@
     <!-- Firebase DB -->
     <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
 
-    <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js'></script>
-
-    <!-- AngularFire -->
-    <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
-
-    <script src='/javascripts/angular/app.js'></script>
-    <script src='/javascripts/angular/directives/chapter.js'></script>
-          
     <script type="text/javascript">
-      function addScript( src ) {
+      function addScript( src, callback ) {
         var s = document.createElement('script');
         s.setAttribute('src', src);
         s.setAttribute('type', 'text/javascript');
+        s.onload = function(){
+          callback();
+        }
         document.head.appendChild( s );
       }
       function getCookie(cname) {
@@ -70,7 +65,7 @@
         </div>
       </nav>
 
-      <div ng-app='gameBook'>
+      <div id='angular-app-container'>
         <div class='main'>
           <div class='home'>
             <h1>Choose your own adventure!</h1>
@@ -118,25 +113,34 @@
         if( getCookie('implementation') == 'AngularJS' ){
           activateAngularJS();
 
-          // todo: load Angular scripts dynamically
+          // todo: load Angular scripts dynamically and synchronously
+          addScript('http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js', function(){
+            addScript("https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js", function(){
+              addScript('/javascripts/angular/directives/chapter.js', function(){
+                addScript('/javascripts/angular/app.js', function(){
+                  angular.bootstrap($('#angular-app-container'), ['gameBook']);
 
-          // load a new story upon user selection
-          $('.main').on('click', '.home a', function(el){
-            var story_title = $(el.target).text().toLowerCase().replace(' ', '-');
+                  // load a new story upon user selection
+                  $('.main').on('click', '.home a', function(el){
+                    var story_title = $(el.target).text().toLowerCase().replace(' ', '-');
 
-            var el = document.createElement('div');
-            el.setAttribute('ng-include', "'templates/angular/chapter-container.html'");
-            el.setAttribute('id', 'dynamic-chapter-container');
-            $('.main').replaceWith(el);
-            angular.element('#dynamic-chapter-container').injector().invoke(['$compile', function ($compile) {
-              var $scope = angular.element(el).scope();
-              $compile(el)($scope);
-              $scope.$apply();
-            }]);
-          });
+                    var el = document.createElement('div');
+                    el.setAttribute('ng-include', "'templates/angular/chapter-container.html'");
+                    el.setAttribute('id', 'dynamic-chapter-container');
+                    $('.main').replaceWith(el);
+                    angular.element('#dynamic-chapter-container').injector().invoke(['$compile', function ($compile) {
+                      var $scope = angular.element(el).scope();
+                      $compile(el)($scope);
+                      $scope.$apply();
+                    }]);
+                  });
+                });
+              });
+            });
+        });
         }else{
           activatePlainJS();
-          addScript('javascripts/plain/app.js');
+          addScript('javascripts/plain/app.js', function(){});
         }
       });
     </script>
