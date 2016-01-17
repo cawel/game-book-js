@@ -109,35 +109,44 @@
         document.cookie="implementation=AngularJS";
       }
 
+      function loadAngularScripts(){
+        // todo: load Angular scripts dynamically and synchronously
+        addScript('http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js', function(){
+          addScript("https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js", function(){
+            addScript('/javascripts/angular/directives/chapter.js', function(){
+              addScript('/javascripts/angular/app.js', function(){
+                angular.bootstrap($('#angular-app-container'), ['gameBook']);
+
+                // load a new story upon user selection
+                $('.main').on('click', '.home a', function(el){
+                  var story_title = $(el.target).text().toLowerCase().replace(' ', '-');
+
+                  var el = document.createElement('div');
+                  el.setAttribute('ng-include', "'templates/angular/chapter-container.html'");
+                  el.setAttribute('id', 'dynamic-chapter-container');
+                  $('.main').replaceWith(el);
+                  angular.element('#dynamic-chapter-container').injector().invoke(['$compile', function ($compile) {
+                    var $scope = angular.element(el).scope();
+                    $compile(el)($scope);
+                    $scope.$apply();
+                  }]);
+                });
+              });
+            });
+          });
+        });
+      }
+
       $(function(){
         if( getCookie('implementation') == 'AngularJS' ){
           activateAngularJS();
 
-          // todo: load Angular scripts dynamically and synchronously
-          addScript('http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js', function(){
-            addScript("https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js", function(){
-              addScript('/javascripts/angular/directives/chapter.js', function(){
-                addScript('/javascripts/angular/app.js', function(){
-                  angular.bootstrap($('#angular-app-container'), ['gameBook']);
+          // load a new story upon user selection
+          $('.main').on('click', '.home a', function(el){
+            $.selected_story = $(el.target).text().toLowerCase().replace(' ', '-');
+          });
 
-                  // load a new story upon user selection
-                  $('.main').on('click', '.home a', function(el){
-                    var story_title = $(el.target).text().toLowerCase().replace(' ', '-');
-
-                    var el = document.createElement('div');
-                    el.setAttribute('ng-include', "'templates/angular/chapter-container.html'");
-                    el.setAttribute('id', 'dynamic-chapter-container');
-                    $('.main').replaceWith(el);
-                    angular.element('#dynamic-chapter-container').injector().invoke(['$compile', function ($compile) {
-                      var $scope = angular.element(el).scope();
-                      $compile(el)($scope);
-                      $scope.$apply();
-                    }]);
-                  });
-                });
-              });
-            });
-        });
+          loadAngularScripts();
         }else{
           activatePlainJS();
           addScript('javascripts/plain/app.js', function(){});

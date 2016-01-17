@@ -2,7 +2,8 @@
   var app = angular.module('gameBook', ['firebase', 'gameBook.directives.chapter']);
 
   app.controller('StoryController', function($scope, $compile){
-    var storiesDB = new Firebase('https://game-book-stories.firebaseio.com/stories/the-encounter/chapters');
+    var url = 'https://game-book-stories.firebaseio.com/stories/' + $.selected_story + '/chapters'
+    var storiesDB = new Firebase(url);
 
     var fetchFromFirebase = function(chapter_nb, callback){
       storiesDB.child(String(chapter_nb)).on("value", function(snapshot){
