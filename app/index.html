@@ -58,6 +58,7 @@
                 <ul class="dropdown-menu">
                   <li class='menu-item-plain-js'><a class='plain-js' href="#">Plain JS</a></li>
                   <li class='menu-item-angular-js'><a class='angular-js' href="#">Angular JS</a></li>
+                  <li class='menu-item-react-js'><a class='react-js' href="#">React JS</a></li>
                 </ul>
               </li>
             </ul>
@@ -65,7 +66,7 @@
         </div>
       </nav>
 
-      <div id='angular-app-container'>
+      <div id='app-container'>
         <div class='main'>
           <div class='home'>
             <h1>Choose your own adventure!</h1>
@@ -95,18 +96,31 @@
           activateAngularJS();
           location.reload();
         });
+        $('.dropdown').on('click', '.react-js', function(el){
+          activateReactJS();
+          location.reload();
+        });
       });
 
       function activatePlainJS(){
         $('.menu-item-plain-js').addClass('active');
         $('.menu-item-angular-js').removeClass('active');
+        $('.menu-item-react-js').removeClass('active');
         document.cookie="implementation=PlainJS";
       }
 
       function activateAngularJS(){
         $('.menu-item-plain-js').removeClass('active');
         $('.menu-item-angular-js').addClass('active');
+        $('.menu-item-react-js').removeClass('active');
         document.cookie="implementation=AngularJS";
+      }
+
+      function activateReactJS(){
+        $('.menu-item-plain-js').removeClass('active');
+        $('.menu-item-angular-js').removeClass('active');
+        $('.menu-item-react-js').addClass('active');
+        document.cookie="implementation=ReactJS";
       }
 
       function loadAngularScripts(){
@@ -115,21 +129,51 @@
           addScript("https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js", function(){
             addScript('/javascripts/angular/directives/chapter.js', function(){
               addScript('/javascripts/angular/app.js', function(){
-                angular.bootstrap($('#angular-app-container'), ['gameBook']);
+                angular.bootstrap($('#app-container'), ['gameBook']);
 
-                // load a new story upon user selection
-                $('.main').on('click', '.home a', function(el){
-                  var story_title = $(el.target).text().toLowerCase().replace(' ', '-');
+                  // load a new story upon user selection
+                  $('.main').on('click', '.home a', function(el){
+                    var story_title = $(el.target).text().toLowerCase().replace(' ', '-');
 
-                  var el = document.createElement('div');
-                  el.setAttribute('ng-include', "'templates/angular/chapter-container.html'");
-                  el.setAttribute('id', 'dynamic-chapter-container');
-                  $('.main').replaceWith(el);
-                  angular.element('#dynamic-chapter-container').injector().invoke(['$compile', function ($compile) {
-                    var $scope = angular.element(el).scope();
-                    $compile(el)($scope);
-                    $scope.$apply();
-                  }]);
+                    var el = document.createElement('div');
+                    el.setAttribute('ng-include', "'templates/angular/chapter-container.html'");
+                    el.setAttribute('id', 'dynamic-chapter-container');
+                    $('.main').replaceWith(el);
+                    angular.element('#dynamic-chapter-container').injector().invoke(['$compile', function ($compile) {
+                      var $scope = angular.element(el).scope();
+                      $compile(el)($scope);
+                      $scope.$apply();
+                    }]);
+                });
+              });
+            });
+          });
+        });
+      }
+
+      function loadReactScripts(){
+        addScript("https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react.js", function(){
+          addScript("https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react-dom.js", function(){
+            addScript("https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js", function(){
+              addScript("https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js", function(){
+                addScript("/javascripts/react/story.js", function(){
+                  addScript("/javascripts/react/chapter.js", function(){
+                    addScript("/javascripts/react/show_hide.js", function(){
+
+                    // load a new story upon user selection
+                    $('.main').on('click', '.home a', function(el){
+                      var story_title = $(el.target).text().toLowerCase().replace(' ', '-');
+
+                      // React code
+                      ReactDOM.render(
+                          React.createElement(Story, {title_url_segment: story_title}),
+                        document.getElementById('app-container')
+                      );
+                      // end of React code
+
+                      });
+                    });
+                  });
                 });
               });
             });
@@ -147,6 +191,9 @@
           });
 
           loadAngularScripts();
+        }else if( getCookie('implementation') == 'ReactJS' ){
+          activateReactJS();
+          loadReactScripts();
         }else{
           activatePlainJS();
           addScript('javascripts/plain/app.js', function(){});
