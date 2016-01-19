@@ -6,6 +6,7 @@ The idea is to experiment with JavaScript technologies while implemeting a game 
 
 * Plain JS
 * Angular JS
+* React JS
 
 The data resides on a nosql db on Firebase.io
 
