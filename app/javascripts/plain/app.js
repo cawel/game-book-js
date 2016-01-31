@@ -1,7 +1,7 @@
 $(function() {
-  console.log("firing document ready event!");
+  console.log("Fired 'document ready' event!");
 
-  // load a new story upon user selection
+  // load a new story when the user clicks a link
   $('.main').on('click', '.home a', function(el){
     var story_title = $(el.target).text().toLowerCase().replace(' ', '-');
     var story = Story(story_title, '.main');
@@ -25,7 +25,7 @@ function Story(story_title, dom_container){
     });
   }
 
-  var display_next_chapter = function(chapter){
+  var show_next_chapter = function(chapter){
     $('.chapter > .title').html(chapter.title);
     $('.chapter > .text').html(chapter.text);
 
@@ -35,7 +35,7 @@ function Story(story_title, dom_container){
       $('.chapter > .choices').append("<ul>");
       $('.chapter > .choices').append("<li><a data-next-chapter-nb='" + choice[1] + "' class='choice' href='#'>" + choice[0] + "</a></li>");
       $('.chapter > .choices').append("</ul>");
-      // preload_chapters(choice[1]);
+      preload_chapters(choice[1]);
     });
 
     // edge case for the last chapter
@@ -45,25 +45,32 @@ function Story(story_title, dom_container){
   }
 
   var load_next_chapter = function(chapter_nb){
-    if (chapters[chapter_nb] ) {
-      display_next_chapter(chapters[chapter_nb])
+    if (chapters[chapter_nb]) {
+      show_next_chapter(chapters[chapter_nb])
     } else { 
-      storiesDB.child(String(chapter_nb)).on("value", function(snapshot){
-        var chapter = snapshot.val();
-        if( chapter == null ){
-          console.log("Could not find the chapter '" + chapter_nb + "' for story '" + story_title + "'");
-        }else{
-          display_next_chapter(snapshot.val());
-        }
+      fetch_chapter(String(chapter_nb), function(chapter){
+        if (chapter) show_next_chapter(chapter);
       });
     }
   };
 
-  var preload_chapters = function(chapter_nb){
-    $.getJSON(story_endpoint_url(chapter_nb), function(chapter){
-      chapters[chapter_nb] = chapter;
+  var fetch_chapter = function(chapter_nb, callback){
+    // fetches data from remote db on Firebase.io
+    storiesDB.child(String(chapter_nb)).on("value", function(snapshot){
+      chapter = snapshot.val();
+      if( chapter == null || chapter == undefined ){
+        console.log("Could not find the chapter '" + chapter_nb + "' for story '" + story_title + "'");
+        chapter = null;
+      }
+      callback(chapter);
     });
-  }
+  };
+
+  var preload_chapters = function(chapter_nb){
+    fetch_chapter(String(chapter_nb), function(chapter){
+      if (chapter) chapters[chapter_nb] = chapter;
+    });
+  };
 
   $(dom_container).on('click', 'a.choice', function(el){
     next_chapter_nb = $(el.target).data('next-chapter-nb');
