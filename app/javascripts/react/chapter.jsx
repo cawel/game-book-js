@@ -7,6 +7,7 @@ var Chapter = React.createClass({
     text : React.PropTypes.string,
     choices : React.PropTypes.array,
     nextChapter : React.PropTypes.func,
+    fetchNextChapter: React.PropTypes.func
   },
 
   renderChoices: function(){
@@ -15,6 +16,7 @@ var Chapter = React.createClass({
     } else {
       var rows = [];
       for (var i=0; i < this.props.choices.length; i++) {
+        this.props.fetchNextChapter(this.props.choices[i][1]);
         rows.push(
             <li key={i}>
             <a className='choice' href='#' onClick={this.props.nextChapter.bind(null, this.props.choices[i][1])}>{[this.props.choices[i][0]]}</a>

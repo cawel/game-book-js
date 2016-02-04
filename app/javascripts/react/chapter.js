@@ -7,7 +7,8 @@ var Chapter = React.createClass({
     title: React.PropTypes.string,
     text: React.PropTypes.string,
     choices: React.PropTypes.array,
-    nextChapter: React.PropTypes.func
+    nextChapter: React.PropTypes.func,
+    fetchNextChapter: React.PropTypes.func
   },
 
   renderChoices: function () {
@@ -16,6 +17,7 @@ var Chapter = React.createClass({
     } else {
       var rows = [];
       for (var i = 0; i < this.props.choices.length; i++) {
+        this.props.fetchNextChapter(this.props.choices[i][1]);
         rows.push(React.createElement(
           'li',
           { key: i },
