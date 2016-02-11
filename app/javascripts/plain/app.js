@@ -23,14 +23,14 @@ function Story(storyTitle, domContainer){
     $(domContainer).load('templates/plain/story.html', function(){
       loadNextChapter(1);
     });
-  }
+  };
 
   var showNextChapter = function(chapter){
     $('.chapter > .title').html(chapter.title);
     $('.chapter > .text').html(chapter.text);
 
     $('.chapter > .choices').empty();
-    if ( chapter.choices == undefined ) chapter.choices = [];
+    chapter.choices = chapter.choices || [];
 
     chapter.choices.forEach(function(choice){
       $('.chapter > .choices').append("<ul>");
@@ -40,14 +40,14 @@ function Story(storyTitle, domContainer){
     });
 
     // edge case for the last chapter
-    if(chapter.choices.length == 0){
+    if(chapter.choices.length === 0){
       $('.choices-title').text('The End.');
     }
-  }
+  };
 
   var loadNextChapter = function(chapterNb){
     if (chapters[chapterNb]) {
-      showNextChapter(chapters[chapterNb])
+      showNextChapter(chapters[chapterNb]);
     } else { 
       fetchChapter(String(chapterNb), function(chapter){
         if (chapter) showNextChapter(chapter);
@@ -59,7 +59,7 @@ function Story(storyTitle, domContainer){
     // fetches data from remote db on Firebase.io
     storiesDB.child(String(chapterNb)).on("value", function(snapshot){
       chapter = snapshot.val();
-      if( chapter == null || chapter == undefined ){
+      if( !chapter ){
         console.log("Could not find the chapter '" + chapterNb + "' for story '" + storyTitle + "'");
         chapter = null;
       }
@@ -80,5 +80,5 @@ function Story(storyTitle, domContainer){
 
   return {
     start : start
-  }
+  };
 }

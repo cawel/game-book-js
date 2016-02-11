@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
     <!-- App-specific CSS -->
-    <link rel="stylesheet" type="text/css" href="stylesheets/app.css">
+    <link rel="stylesheet" href="stylesheets/app.css">
 
     <!-- jQuery (required by Bootstrap) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -19,7 +19,7 @@
     <!-- Firebase DB -->
     <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
 
-    <script type="text/javascript">
+    <script>
       function addScript( src, callback ) {
         var s = document.createElement('script');
         s.setAttribute('src', src);
@@ -29,6 +29,7 @@
         }
         document.head.appendChild( s );
       }
+
       function getCookie(cookie_name) {
         var name = cookie_name + "=";
         var ca = document.cookie.split(';');
@@ -191,13 +192,18 @@
           });
 
           loadAngularScripts();
-        }else if( getCookie('implementation') == 'ReactJS' ){
+          return;
+        }
+
+        if( getCookie('implementation') == 'ReactJS' ){
           activateReactJS();
           loadReactScripts();
-        }else{
-          activatePlainJS();
-          addScript('javascripts/plain/app.js', function(){});
+          return;
         }
+
+        // default implementation
+        activatePlainJS();
+        addScript('javascripts/plain/app.js', function(){});
       });
     </script>
 

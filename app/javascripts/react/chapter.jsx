@@ -13,18 +13,18 @@ var Chapter = React.createClass({
   renderChoices: function(){
     if ( !this.props.choices ){
       return '';
-    } else {
-      var rows = [];
-      for (var i=0; i < this.props.choices.length; i++) {
-        this.props.fetchNextChapter(this.props.choices[i][1]);
-        rows.push(
-            <li key={i}>
-            <a className='choice' href='#' onClick={this.props.nextChapter.bind(null, this.props.choices[i][1])}>{[this.props.choices[i][0]]}</a>
-            </li>
-        );
-      }
-      return rows;
+    } 
+
+    var rows = [];
+    for (var i=0; i < this.props.choices.length; i++) {
+      this.props.fetchNextChapter(this.props.choices[i][1]);
+      rows.push(
+          <li key={i}>
+          <a className='choice' href='#' onClick={this.props.nextChapter.bind(null, this.props.choices[i][1])}>{[this.props.choices[i][0]]}</a>
+          </li>
+      );
     }
+    return rows;
   },
 
   endOfStory: function(){
@@ -34,13 +34,13 @@ var Chapter = React.createClass({
   showEnd: function(){
     if( this.endOfStory() ){
       return '';
-    } else {
-      return (
-        <div>
-          <h2 className='choices-title'>The End</h2>
-        </div>
-      );
     }
+
+    return (
+      <div>
+        <h2 className='choices-title'>The End</h2>
+      </div>
+    );
   },
 
   render: function() {

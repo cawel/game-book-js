@@ -23,9 +23,9 @@ var Story = React.createClass({
 
   displayChapter: function(chapter){
     this.setState({
-      text: chapter['text'],
-      title: chapter['title'],
-      choices: chapter['choices']
+      text: chapter.text,
+      title: chapter.title,
+      choices: chapter.choices
     });
   },
 
