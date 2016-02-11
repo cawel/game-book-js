@@ -6,15 +6,15 @@
     var storiesDB = new Firebase(url);
     var chapters = [];
 
-    var fetchFromFirebase = function(chapter_nb, callback){
-      storiesDB.child(String(chapter_nb)).on("value", function(snapshot){
-        console.log('Fetching chapter ' + chapter_nb + ' from remote.');
+    var fetchFromFirebase = function(chapterNb, callback){
+      storiesDB.child(String(chapterNb)).on("value", function(snapshot){
+        console.log('Fetching chapter ' + chapterNb + ' from remote.');
         var chapter = snapshot.val();
         if(chapter){
-          chapters[chapter_nb] = chapter;
+          chapters[chapterNb] = chapter;
           if(callback) callback(chapter);
         }else{
-          console.log("Could not find the chapter '" + chapter_nb + "'");
+          console.log("Could not find the chapter '" + chapterNb + "'");
         }
       });
     };
@@ -30,13 +30,13 @@
       });
     };
 
-    $scope.selectChapter = function(chapter_nb){
-      var chapter = chapters[chapter_nb];
+    $scope.selectChapter = function(chapterNb){
+      var chapter = chapters[chapterNb];
       if (chapter){
-        console.log('Reading chapter ' + chapter_nb + ' from cache.');
+        console.log('Reading chapter ' + chapterNb + ' from cache.');
         showChapter(chapter);
       }else {
-        fetchFromFirebase(chapter_nb, showChapter);
+        fetchFromFirebase(chapterNb, showChapter);
       }
     };
 
