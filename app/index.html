@@ -162,11 +162,11 @@
 
                     // load a new story upon user selection
                     $('.main').on('click', '.home a', function(el){
-                      var story_title = $(el.target).text().toLowerCase().replace(' ', '-');
+                      var storyTitle = $(el.target).text().toLowerCase().replace(' ', '-');
 
                       // React code
                       ReactDOM.render(
-                          React.createElement(Story, {title_url_segment: story_title}),
+                          React.createElement(Story, {titleUrlSegment: storyTitle}),
                         document.getElementById('app-container')
                       );
                       // end of React code

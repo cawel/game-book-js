@@ -2,18 +2,18 @@ console.log('loaded story JSX file !');
 
 var Story = React.createClass({
 
-  fetchNextChapter: function (chapter_nb, callback) {
+  fetchNextChapter: function (chapterNb, callback) {
     var that = this;
 
-    console.log('About to fetch chapter ' + chapter_nb + '.');
-    this.storiesDB.child(String(chapter_nb)).on("value", function (snapshot) {
+    console.log('About to fetch chapter ' + chapterNb + '.');
+    this.storiesDB.child(String(chapterNb)).on("value", function (snapshot) {
       var chapter = snapshot.val();
       console.log(chapter);
 
       if (chapter == null) {
-        console.log("Could not find the chapter '" + chapter_nb + "' for story '" + that.props.title_url_segment + "'");
+        console.log("Could not find the chapter '" + chapterNb + "' for story '" + that.props.titleUrlSegment + "'");
       } else {
-        that.chapters[chapter_nb] = chapter;
+        that.chapters[chapterNb] = chapter;
         if(callback){
           callback(chapter);
         }
@@ -29,18 +29,18 @@ var Story = React.createClass({
     });
   },
 
-  nextChapter: function (chapter_nb) {
-    var chapter = this.chapters[chapter_nb];
+  nextChapter: function (chapterNb) {
+    var chapter = this.chapters[chapterNb];
     if(chapter) {
-      console.log('Read chapter ' + chapter_nb + ' from cache.');
+      console.log('Read chapter ' + chapterNb + ' from cache.');
       this.displayChapter(chapter);
     }else{
-      this.fetchNextChapter(chapter_nb, this.displayChapter);
+      this.fetchNextChapter(chapterNb, this.displayChapter);
     }
   },
 
   getInitialState: function() {
-    this.storiesDB = new Firebase('https://game-book-stories.firebaseio.com/stories/' + this.props.title_url_segment + '/chapters');
+    this.storiesDB = new Firebase('https://game-book-stories.firebaseio.com/stories/' + this.props.titleUrlSegment + '/chapters');
     this.chapters = []
     this.chapter = null;
     this.fetchNextChapter(1, this.displayChapter);
@@ -49,11 +49,11 @@ var Story = React.createClass({
   },
 
   propTypes: {
-    title_url_segment : React.PropTypes.string.isRequired
+    titleUrlSegment : React.PropTypes.string.isRequired
   },
 
   render: function() {
-    console.log(this.props.title_url_segment);
+    console.log(this.props.titleUrlSegment);
 
     return (
       <Chapter text={this.state.text} 
