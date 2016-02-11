@@ -3,8 +3,8 @@ $(function() {
 
   // load a new story when the user clicks a link
   $('.main').on('click', '.home a', function(el){
-    var story_title = $(el.target).text().toLowerCase().replace(' ', '-');
-    var story = Story(story_title, '.main');
+    var storyTitle = $(el.target).text().toLowerCase().replace(' ', '-');
+    var story = Story(storyTitle, '.main');
     story.start();
   });
 
@@ -14,28 +14,29 @@ $(function() {
 });
 
 
-function Story(story_title, dom_container){
+function Story(storyTitle, domContainer){
 
   var chapters = [];
-  var storiesDB = new Firebase('https://game-book-stories.firebaseio.com/stories/' + story_title + '/chapters');
+  var storiesDB = new Firebase('https://game-book-stories.firebaseio.com/stories/' + storyTitle + '/chapters');
 
   var start = function(){
-    $(dom_container).load('templates/plain/story.html', function(){
-      load_next_chapter(1);
+    $(domContainer).load('templates/plain/story.html', function(){
+      loadNextChapter(1);
     });
   }
 
-  var show_next_chapter = function(chapter){
+  var showNextChapter = function(chapter){
     $('.chapter > .title').html(chapter.title);
     $('.chapter > .text').html(chapter.text);
 
     $('.chapter > .choices').empty();
     if ( chapter.choices == undefined ) chapter.choices = [];
+
     chapter.choices.forEach(function(choice){
       $('.chapter > .choices').append("<ul>");
       $('.chapter > .choices').append("<li><a data-next-chapter-nb='" + choice[1] + "' class='choice' href='#'>" + choice[0] + "</a></li>");
       $('.chapter > .choices').append("</ul>");
-      preload_chapters(choice[1]);
+      preloadChapters(choice[1]);
     });
 
     // edge case for the last chapter
@@ -44,37 +45,37 @@ function Story(story_title, dom_container){
     }
   }
 
-  var load_next_chapter = function(chapter_nb){
-    if (chapters[chapter_nb]) {
-      show_next_chapter(chapters[chapter_nb])
+  var loadNextChapter = function(chapterNb){
+    if (chapters[chapterNb]) {
+      showNextChapter(chapters[chapterNb])
     } else { 
-      fetch_chapter(String(chapter_nb), function(chapter){
-        if (chapter) show_next_chapter(chapter);
+      fetchChapter(String(chapterNb), function(chapter){
+        if (chapter) showNextChapter(chapter);
       });
     }
   };
 
-  var fetch_chapter = function(chapter_nb, callback){
+  var fetchChapter = function(chapterNb, callback){
     // fetches data from remote db on Firebase.io
-    storiesDB.child(String(chapter_nb)).on("value", function(snapshot){
+    storiesDB.child(String(chapterNb)).on("value", function(snapshot){
       chapter = snapshot.val();
       if( chapter == null || chapter == undefined ){
-        console.log("Could not find the chapter '" + chapter_nb + "' for story '" + story_title + "'");
+        console.log("Could not find the chapter '" + chapterNb + "' for story '" + storyTitle + "'");
         chapter = null;
       }
       callback(chapter);
     });
   };
 
-  var preload_chapters = function(chapter_nb){
-    fetch_chapter(String(chapter_nb), function(chapter){
-      if (chapter) chapters[chapter_nb] = chapter;
+  var preloadChapters = function(chapterNb){
+    fetchChapter(String(chapterNb), function(chapter){
+      if (chapter) chapters[chapterNb] = chapter;
     });
   };
 
-  $(dom_container).on('click', 'a.choice', function(el){
-    next_chapter_nb = $(el.target).data('next-chapter-nb');
-    load_next_chapter(next_chapter_nb);
+  $(domContainer).on('click', 'a.choice', function(el){
+    var nextChapterNb = $(el.target).data('next-chapter-nb');
+    loadNextChapter(nextChapterNb);
   });
 
   return {
