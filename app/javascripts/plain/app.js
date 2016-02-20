@@ -16,6 +16,8 @@ $(function() {
 
 function Story(storyTitle, domContainer){
 
+  var exports = {};
+
   var chapters = [];
   var storiesDB = new Firebase('https://game-book-stories.firebaseio.com/stories/' + storyTitle + '/chapters');
 
@@ -24,6 +26,7 @@ function Story(storyTitle, domContainer){
       loadNextChapter(1);
     });
   };
+  exports.start = start;
 
   var showNextChapter = function(chapter){
     $('.chapter > .title').html(chapter.title);
@@ -78,7 +81,5 @@ function Story(storyTitle, domContainer){
     loadNextChapter(nextChapterNb);
   });
 
-  return {
-    start : start
-  };
+  return exports;
 }
