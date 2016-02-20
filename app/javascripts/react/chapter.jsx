@@ -28,11 +28,11 @@ var Chapter = React.createClass({
   },
 
   endOfStory: function(){
-    return this.props.choices && this.props.choices.length > 0;
+    return !(this.props.choices && this.props.choices.length > 0);
   },
 
   showEnd: function(){
-    if( this.endOfStory() ){
+    if( !this.endOfStory() ){
       return '';
     }
 
