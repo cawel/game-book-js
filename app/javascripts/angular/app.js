@@ -13,9 +13,9 @@
         if(chapter){
           chapters[chapterNb] = chapter;
           if(callback) callback(chapter);
-        }else{
-          console.log("Could not find the chapter '" + chapterNb + "'");
         }
+
+        console.log("Could not find the chapter '" + chapterNb + "'");
       });
     };
 
@@ -35,9 +35,10 @@
       if (chapter){
         console.log('Reading chapter ' + chapterNb + ' from cache.');
         showChapter(chapter);
-      }else {
-        fetchFromFirebase(chapterNb, showChapter);
+        return;
       }
+
+      fetchFromFirebase(chapterNb, showChapter);
     };
 
     // start at the first chapter

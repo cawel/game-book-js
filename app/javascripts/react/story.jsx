@@ -12,11 +12,12 @@ var Story = React.createClass({
 
       if (chapter == null) {
         console.log("Could not find the chapter '" + chapterNb + "' for story '" + that.props.titleUrlSegment + "'");
-      } else {
-        that.chapters[chapterNb] = chapter;
-        if(callback){
-          callback(chapter);
-        }
+        return;
+      }
+
+      that.chapters[chapterNb] = chapter;
+      if(callback){
+        callback(chapter);
       }
     });
   },
@@ -31,12 +32,13 @@ var Story = React.createClass({
 
   nextChapter: function (chapterNb) {
     var chapter = this.chapters[chapterNb];
-    if(chapter) {
+    if (chapter) {
       console.log('Read chapter ' + chapterNb + ' from cache.');
       this.displayChapter(chapter);
-    }else{
-      this.fetchNextChapter(chapterNb, this.displayChapter);
+      return;
     }
+
+    this.fetchNextChapter(chapterNb, this.displayChapter);
   },
 
   getInitialState: function() {

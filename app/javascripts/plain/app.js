@@ -51,11 +51,12 @@ function Story(storyTitle, domContainer){
   var loadNextChapter = function(chapterNb){
     if (chapters[chapterNb]) {
       showNextChapter(chapters[chapterNb]);
-    } else { 
-      fetchChapter(chapterNb, function(chapter){
-        if (chapter) showNextChapter(chapter);
-      });
+      return;
     }
+
+    fetchChapter(chapterNb, function(chapter){
+      if (chapter) showNextChapter(chapter);
+    });
   };
 
   var fetchChapter = function(chapterNb, callback){
