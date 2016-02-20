@@ -52,7 +52,7 @@ function Story(storyTitle, domContainer){
     if (chapters[chapterNb]) {
       showNextChapter(chapters[chapterNb]);
     } else { 
-      fetchChapter(String(chapterNb), function(chapter){
+      fetchChapter(chapterNb, function(chapter){
         if (chapter) showNextChapter(chapter);
       });
     }
@@ -60,7 +60,7 @@ function Story(storyTitle, domContainer){
 
   var fetchChapter = function(chapterNb, callback){
     // fetches data from remote db on Firebase.io
-    storiesDB.child(String(chapterNb)).on("value", function(snapshot){
+    storiesDB.child(chapterNb).on("value", function(snapshot){
       chapter = snapshot.val();
       if( !chapter ){
         console.log("Could not find the chapter '" + chapterNb + "' for story '" + storyTitle + "'");
@@ -71,7 +71,7 @@ function Story(storyTitle, domContainer){
   };
 
   var preloadChapters = function(chapterNb){
-    fetchChapter(String(chapterNb), function(chapter){
+    fetchChapter(chapterNb, function(chapter){
       if (chapter) chapters[chapterNb] = chapter;
     });
   };
