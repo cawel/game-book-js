@@ -19,7 +19,9 @@
     <!-- Firebase DB -->
     <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
 
+    <!-- Useful 3rd party javascript libs -->
     <script src="/javascripts/lib/async.min.js"></script>
+    <script src="/javascripts/lib/store.min.js"></script>
 
     <script>
       function addScript(src, callback) {
@@ -27,20 +29,20 @@
         s.setAttribute('src', src);
         s.setAttribute('type', 'text/javascript');
         s.onload = function(){
+          // success
           callback(null);
         }
         document.head.appendChild(s);
       }
 
-      function getCookie(cookie_name) {
-        var name = cookie_name + "=";
-        var ca = document.cookie.split(';');
-        for(var i=0; i<ca.length; i++) {
-          var c = ca[i];
-          while (c.charAt(0)==' ') c = c.substring(1);
-          if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+      ensureLocalStorageIsSupported();
+
+      // as suggested on the store.js's project page
+      function ensureLocalStorageIsSupported() {
+        if (!store.enabled) {
+          alert('Local storage is not supported by your browser. Please disable "Private Mode", or upgrade to a modern browser.');
+          return;
         }
-        return "";
       }
     </script>
   </head>
@@ -109,21 +111,21 @@
         $('.menu-item-plain-js').addClass('active');
         $('.menu-item-angular-js').removeClass('active');
         $('.menu-item-react-js').removeClass('active');
-        document.cookie="implementation=PlainJS";
+        store.set('implementation', 'PlainJS');
       }
 
       function activateAngularJS(){
         $('.menu-item-plain-js').removeClass('active');
         $('.menu-item-angular-js').addClass('active');
         $('.menu-item-react-js').removeClass('active');
-        document.cookie="implementation=AngularJS";
+        store.set('implementation', 'AngularJS');
       }
 
       function activateReactJS(){
         $('.menu-item-plain-js').removeClass('active');
         $('.menu-item-angular-js').removeClass('active');
         $('.menu-item-react-js').addClass('active');
-        document.cookie="implementation=ReactJS";
+        store.set('implementation', 'ReactJS');
       }
 
       function loadAngularScripts(){
@@ -137,7 +139,7 @@
 
             // load a new story upon user selection
             $('.main').on('click', '.home a', function(el){
-              var story_title = $(el.target).text().toLowerCase().replace(' ', '-');
+              $.selected_story = $(el.target).text().toLowerCase().replace(' ', '-');
 
               var el = document.createElement('div');
               el.setAttribute('ng-include', "'templates/angular/chapter-container.html'");
@@ -166,31 +168,22 @@
             $('.main').on('click', '.home a', function(el){
               var storyTitle = $(el.target).text().toLowerCase().replace(' ', '-');
 
-              // React code
               ReactDOM.render(
-                  React.createElement(Story, {titleUrlSegment: storyTitle}),
-                  document.getElementById('app-container')
-                  );
-              // end of React code
-
+                React.createElement(Story, {titleUrlSegment: storyTitle}),
+                document.getElementById('app-container')
+              );
             });
           });
       }
 
       $(function(){
-        if( getCookie('implementation') == 'AngularJS' ){
+        if(store.get('implementation') === 'AngularJS'){
           activateAngularJS();
-
-          // load a new story upon user selection
-          $('.main').on('click', '.home a', function(el){
-            $.selected_story = $(el.target).text().toLowerCase().replace(' ', '-');
-          });
-
           loadAngularScripts();
           return;
         }
 
-        if( getCookie('implementation') == 'ReactJS' ){
+        if(store.get('implementation') === 'ReactJS'){
           activateReactJS();
           loadReactScripts();
           return;
