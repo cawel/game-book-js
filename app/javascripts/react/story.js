@@ -3,6 +3,7 @@ console.log('loaded story JSX file !');
 var Story = React.createClass({
   displayName: 'Story',
 
+
   fetchNextChapter: function (chapterNb, callback) {
     var that = this;
 

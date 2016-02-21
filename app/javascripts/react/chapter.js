@@ -3,6 +3,7 @@ console.log('loaded chapter JSX file !');
 var Chapter = React.createClass({
   displayName: 'Chapter',
 
+
   propTypes: {
     title: React.PropTypes.string,
     text: React.PropTypes.string,
