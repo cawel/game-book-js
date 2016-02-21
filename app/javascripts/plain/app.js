@@ -35,7 +35,7 @@ function Story(storyTitle, domContainer){
     $('.chapter > .choices').empty();
     chapter.choices = chapter.choices || [];
 
-    chapter.choices.forEach(function(choice){
+    chapter.choices.map(function(choice){
       $('.chapter > .choices').append("<ul>");
       $('.chapter > .choices').append("<li><a data-next-chapter-nb='" + choice[1] + "' class='choice' href='#'>" + choice[0] + "</a></li>");
       $('.chapter > .choices').append("</ul>");

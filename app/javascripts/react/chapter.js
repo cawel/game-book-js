@@ -17,20 +17,18 @@ var Chapter = React.createClass({
       return '';
     }
 
-    var rows = [];
-    for (var i = 0; i < this.props.choices.length; i++) {
-      this.props.fetchNextChapter(this.props.choices[i][1]);
-      rows.push(React.createElement(
+    return this.props.choices.map(function (item, index) {
+      this.props.fetchNextChapter(item[1]);
+      return React.createElement(
         'li',
-        { key: i },
+        { key: index },
         React.createElement(
           'a',
-          { className: 'choice', href: '#', onClick: this.props.nextChapter.bind(null, this.props.choices[i][1]) },
-          [this.props.choices[i][0]]
+          { className: 'choice', href: '#', onClick: this.props.nextChapter.bind(null, item[1]) },
+          item[0]
         )
-      ));
-    }
-    return rows;
+      );
+    }, this);
   },
 
   endOfStory: function () {
@@ -66,7 +64,7 @@ var Chapter = React.createClass({
       React.createElement('hr', { className: 'gradient' }),
       React.createElement(
         ShowHide,
-        { condition: this.endOfStory() },
+        { condition: !this.endOfStory() },
         React.createElement(
           'div',
           null,
